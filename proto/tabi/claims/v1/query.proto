@@ -30,18 +30,19 @@ service Query {
 }
 
 // QueryParamsRequest is request type for the Query/Parameters RPC method
-message QueryParamsRequest {
-}
+message QueryParamsRequest {}
 
 // QueryParamsResponse is response type for the Query/Parameters RPC method
 message QueryParamsResponse {
-  Params params = 1 [ (gogoproto.nullable) = false ];
-
+  // params
+  Params params = 1 [(gogoproto.nullable) = false];
+  // res
   cosmos.base.query.v1beta1.PageResponse res = 2;
 }
 
 // QueryNodeTotalRewardsRequest is request type for the Query/NodeTotalRewards RPC method
 message QueryNodeTotalRewardsRequest {
+  // node_id
   string node_id = 1;
 }
 
@@ -49,11 +50,12 @@ message QueryNodeTotalRewardsRequest {
 message QueryNodeTotalRewardsResponse {
   // rewards defines the rewards accrued by a delegation.
   repeated cosmos.base.v1beta1.DecCoin rewards = 1
-  [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins"];
+      [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins"];
 }
 
 // QueryHolderTotalRewardsRequest is request type for the Query/HolderTotalRewards RPC method
 message QueryHolderTotalRewardsRequest {
+  // owner
   string owner = 1;
 }
 
@@ -61,6 +63,5 @@ message QueryHolderTotalRewardsRequest {
 message QueryHolderTotalRewardsResponse {
   // rewards defines the rewards accrued by a delegation.
   repeated cosmos.base.v1beta1.DecCoin rewards = 1
-  [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins"];
+      [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins"];
 }
-

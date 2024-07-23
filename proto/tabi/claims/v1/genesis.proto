@@ -10,6 +10,6 @@ option go_package = "github.com/tabilabs/tabi/x/claims/types";
 
 // GenesisState define the claims module's genesis state.
 message GenesisState {
-    // params defines all the parameters of the module.
-    Params params = 1 [(gogoproto.nullable) = false];
+  // params defines all the parameters of the module.
+  Params params = 1 [(gogoproto.nullable) = false];
 }

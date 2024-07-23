@@ -7,9 +7,10 @@ import "cosmos_proto/cosmos.proto";
 
 option go_package = "github.com/tabilabs/tabi/x/claims/types";
 
+// Params
 message Params {
-    // enable_claims is the parameter to enable the claiming process
-    bool enable_claims = 1;
-    // claims_denom is the denomination of the claimable coin
-    string claims_denom = 2;
+  // enable_claims is the parameter to enable the claiming process
+  bool enable_claims = 1;
+  // claims_denom is the denomination of the claimable coin
+  string claims_denom = 2;
 }
