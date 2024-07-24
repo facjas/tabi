@@ -440,7 +440,7 @@ proto-download-deps:
 	git init && \
 	git remote add origin "https://github.com/cosmos/cosmos-sdk.git" && \
 	git config core.sparseCheckout true && \
-	printf "proto\nthird_party\n" > .git/info/sparse-checkout && \
+	printf "proto\third_party\n" > .git/info/sparse-checkout && \
 	git pull origin main && \
 	rm -f ./proto/buf.* && \
 	mv ./proto/* ..
