@@ -4,7 +4,69 @@ info:
   description: A REST interface for state queries and transactions
   version: 1.0.0
 paths:
-  /x/claims/v1/holders/{owner}/total_rewards:
+  /x/claims/v1/holders/{owner}/claimed-rewards:
+    get:
+      summary: HolderClaimedRewards queries the claim rewards accrued by a delegation.
+      operationId: HolderClaimedRewards
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              rewards:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    denom:
+                      type: string
+                    amount:
+                      type: string
+                  description: >-
+                    DecCoin defines a token with a denomination and a decimal
+                    amount.
+
+
+                    NOTE: The amount field is an Dec which implements the custom
+                    method
+
+                    signatures required by gogoproto.
+                description: rewards defines the rewards accrued by a delegation.
+            title: >-
+              QueryHolderClaimedRewardsResponse is response type for the
+              Query/HolderClaimedRewards RPC method
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    type_url:
+                      type: string
+                    value:
+                      type: string
+                      format: byte
+      parameters:
+        - name: owner
+          description: owner
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
+  /x/claims/v1/holders/{owner}/total-rewards:
     get:
       summary: HolderTotalRewards queries the total rewards accrued by a delegation.
       operationId: HolderTotalRewards
@@ -66,7 +128,7 @@ paths:
           type: string
       tags:
         - Query
-  /x/claims/v1/nodes/{node_id}/total_rewards:
+  /x/claims/v1/nodes/{node_id}/total-rewards:
     get:
       summary: NodeTotalRewards queries the total rewards accrued by a delegation.
       operationId: NodeTotalRewards
@@ -246,6 +308,53 @@ paths:
                     value:
                       type: string
                       format: byte
+      tags:
+        - Query
+  /x/captains/v1/claimable-computing-power:
+    get:
+      summary: >-
+        ClaimableComputingPower queries the claimable computing power of an
+        address
+      operationId: ClaimableComputingPower
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              claimable_computing_power:
+                type: string
+                format: uint64
+                title: claimable_computing_power
+            title: QueryClaimableComputingPowerResponse
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    type_url:
+                      type: string
+                    value:
+                      type: string
+                      format: byte
+      parameters:
+        - name: owner
+          description: owner.
+          in: query
+          required: false
+          type: string
       tags:
         - Query
   /x/captains/v1/current-epoch:
@@ -839,6 +948,9 @@ paths:
               pledge_ratio:
                 type: string
                 title: pledge_ratio
+              computing_power:
+                type: string
+                title: computing_power
             title: >-
               QueryNodeLastEpochInfoResponse is the response type for the
               Query/NodeLastEpochInfo RPC method
@@ -955,7 +1067,7 @@ paths:
                       format: byte
       tags:
         - Query
-  /x/captains/v1/sale_level:
+  /x/captains/v1/sale-level:
     get:
       summary: SaleLevel queries current sale level
       operationId: SaleLevel
@@ -21863,6 +21975,27 @@ definitions:
         type: string
         title: claims_denom is the denomination of the claimable coin
     title: Params
+  tabi.claims.v1.QueryHolderClaimedRewardsResponse:
+    type: object
+    properties:
+      rewards:
+        type: array
+        items:
+          type: object
+          properties:
+            denom:
+              type: string
+            amount:
+              type: string
+          description: |-
+            DecCoin defines a token with a denomination and a decimal amount.
+
+            NOTE: The amount field is an Dec which implements the custom method
+            signatures required by gogoproto.
+        description: rewards defines the rewards accrued by a delegation.
+    title: >-
+      QueryHolderClaimedRewardsResponse is response type for the
+      Query/HolderClaimedRewards RPC method
   tabi.claims.v1.QueryHolderTotalRewardsResponse:
     type: object
     properties:
@@ -22136,6 +22269,14 @@ definitions:
     title: >-
       QueryAuthorizedMembersResponse is the response type for the
       Query/AuthorizedMembers RPC method
+  tabi.captains.v1.QueryClaimableComputingPowerResponse:
+    type: object
+    properties:
+      claimable_computing_power:
+        type: string
+        format: uint64
+        title: claimable_computing_power
+    title: QueryClaimableComputingPowerResponse
   tabi.captains.v1.QueryCurrentEpochResponse:
     type: object
     properties:
@@ -22306,6 +22447,9 @@ definitions:
       pledge_ratio:
         type: string
         title: pledge_ratio
+      computing_power:
+        type: string
+        title: computing_power
     title: >-
       QueryNodeLastEpochInfoResponse is the response type for the
       Query/NodeLastEpochInfo RPC method
