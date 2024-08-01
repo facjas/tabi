@@ -84,7 +84,7 @@ func (k Keeper) CalculateRewardsByNodeId(ctx sdk.Context, nodeId string) (sdk.De
 
 func (k Keeper) ClaimedRewards(ctx sdk.Context, owner sdk.Address) (sdk.DecCoins, error) {
 	// Calculate the rewards for each node
-	totalClaimedRewards := sdk.Dec{}
+	totalClaimedRewards := sdk.ZeroDec()
 	nodes := k.captainsKeeper.GetNodesByOwner(ctx, owner.Bytes())
 	// check if the sender has not held node
 	if len(nodes) == 0 {
