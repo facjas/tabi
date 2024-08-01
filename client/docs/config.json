@@ -15,6 +15,9 @@
       }
     },
     {
+      "url": "./tmp-swagger-gen/tabi/claims/v1/tx.swagger.json",
+    },
+    {
       "url": "./tmp-swagger-gen/tabi/captains/v1/query.swagger.json",
       "operationIds": {
         "rename": {
@@ -23,12 +26,18 @@
       }
     },
     {
+      "url": "./tmp-swagger-gen/tabi/captains/v1/tx.swagger.json",
+    },
+    {
       "url": "./tmp-swagger-gen/tabi/token-convert/v1/query.swagger.json",
       "operationIds": {
         "rename": {
           "Params": "ConvertParams"
         }
       }
+    },
+    {
+      "url": "./tmp-swagger-gen/tabi/token-convert/v1/tx.swagger.json",
     },
     {
       "url": "./tmp-swagger-gen/ethermint/evm/v1/query.swagger.json",
@@ -89,5 +98,5 @@
         }
       }
     }
-  ]
+  ],
 }

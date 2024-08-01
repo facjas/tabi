@@ -21946,6 +21946,40 @@ definitions:
                    PageResponse page = 2;
            }
     title: QueryParamsResponse is response type for the Query/Parameters RPC method
+  cosmos.base.v1beta1.Coin:
+    type: object
+    properties:
+      denom:
+        type: string
+      amount:
+        type: string
+    description: |-
+      Coin defines a token with a denomination and an amount.
+
+      NOTE: The amount field is an Int which implements the custom method
+      signatures required by gogoproto.
+  tabi.claims.v1.MsgClaimsResponse:
+    type: object
+    properties:
+      amount:
+        type: array
+        items:
+          type: object
+          properties:
+            denom:
+              type: string
+            amount:
+              type: string
+          description: |-
+            Coin defines a token with a denomination and an amount.
+
+            NOTE: The amount field is an Int which implements the custom method
+            signatures required by gogoproto.
+        title: 'amount Since: cosmos-sdk 0.46'
+    description: MsgClaimsResponse defines the Msg/Claims response type.
+  tabi.claims.v1.MsgUpdateParamsResponse:
+    type: object
+    title: MsgUpdateParamsResponse defines the response structure for executing a
   cosmos.base.query.v1beta1.PageRequest:
     type: object
     properties:
@@ -22409,18 +22443,75 @@ definitions:
         format: uint64
         title: amount
     title: QuerySupplyResponse is the response type for the Query/Supply RPC method
-  cosmos.base.v1beta1.Coin:
+  tabi.captains.v1.ClaimableComputingPower:
     type: object
     properties:
-      denom:
-        type: string
       amount:
         type: string
+        format: uint64
+        title: amount
+      owner:
+        type: string
+        title: owner
+    title: ClaimableComputingPower
+  tabi.captains.v1.MsgAddAuthorizedMembersResponse:
+    type: object
+    description: >-
+      MsgAddAuthorizedMembersResponse defines the
+      Msg/AddAuthorizedMemberResponse response type.
+  tabi.captains.v1.MsgClaimComputingPowerResponse:
+    type: object
+    description: >-
+      MsgClaimComputingPowerResponse defines the Msg/ClaimComputingPowerResponse
+      response type.
+  tabi.captains.v1.MsgCommitComputingPowerResponse:
+    type: object
+    description: >-
+      MsgCommitComputingPowerResponse defines the
+      Msg/CommitComputingPowerResponse response type.
+  tabi.captains.v1.MsgCommitReportResponse:
+    type: object
+    description: >-
+      MsgCommitReportResponse defines the Msg/CommitReportResponse response
+      type.
+  tabi.captains.v1.MsgCreateCaptainNodeResponse:
+    type: object
+    properties:
+      node_id:
+        type: string
+        title: node_id
+    description: >-
+      MsgCreateCaptainNodeResponse defines the Msg/CreateCaptainNode response
+      type.
+  tabi.captains.v1.MsgRemoveAuthorizedMembersResponse:
+    type: object
+    description: >-
+      MsgRemoveAuthorizedMembersResponse defines the
+      Msg/RemoveAuthorizedMembersResponse response type.
+  tabi.captains.v1.MsgUpdateParamsResponse:
+    type: object
+    description: >-
+      MsgUpdateParamsResponse defines the Msg/UpdateParamsResponse response
+      type.
+  tabi.captains.v1.MsgUpdateSaleLevelResponse:
+    type: object
+    description: >-
+      MsgUpdateSaleLevelResponse defines the Msg/UpdateSaleLevelResponse
+      response type.
+  tabi.captains.v1.ReportType:
+    type: string
+    enum:
+      - REPORT_TYPE_UNSPECIFIED
+      - REPORT_TYPE_DIGEST
+      - REPORT_TYPE_BATCH
+      - REPORT_TYPE_END
+    default: REPORT_TYPE_UNSPECIFIED
     description: |-
-      Coin defines a token with a denomination and an amount.
-
-      NOTE: The amount field is an Int which implements the custom method
-      signatures required by gogoproto.
+      - REPORT_TYPE_UNSPECIFIED: REPORT_TYPE_UNSPECIFIED
+       - REPORT_TYPE_DIGEST: REPORT_TYPE_DIGEST
+       - REPORT_TYPE_BATCH: REPORT_TYPE_BATCH
+       - REPORT_TYPE_END: REPORT_TYPE_END
+    title: ReportType
   tabi.token_convert.v1.QueryStrategiesResponse:
     type: object
     properties:
@@ -22635,6 +22726,66 @@ definitions:
         type: string
         description: strategy is the unique name of the strategy.
     description: Voucher defines the voucher for redeeming locked token.
+  tabi.token_convert.v1.MsgCancelConvertResponse:
+    type: object
+    properties:
+      vetabi_unlocked:
+        title: vetabi_unlocked
+        type: object
+        properties:
+          denom:
+            type: string
+          amount:
+            type: string
+        description: |-
+          Coin defines a token with a denomination and an amount.
+
+          NOTE: The amount field is an Int which implements the custom method
+          signatures required by gogoproto.
+    description: MsgCancelConvertResponse defines the Msg/CancelConvert response type.
+  tabi.token_convert.v1.MsgConvertTabiResponse:
+    type: object
+    description: MsgConvertTabiResponse defines the Msg/ConvertTabi response type.
+  tabi.token_convert.v1.MsgConvertVetabiResponse:
+    type: object
+    properties:
+      voucher_id:
+        type: string
+        title: voucher_id
+      expiry_time:
+        type: string
+        title: expiry_time
+    description: MsgConvertVetabiResponse defines the Msg/ConvertVetabi response type.
+  tabi.token_convert.v1.MsgWithdrawTabiResponse:
+    type: object
+    properties:
+      tabi_withdrawn:
+        title: tabi_withdrawn
+        type: object
+        properties:
+          denom:
+            type: string
+          amount:
+            type: string
+        description: |-
+          Coin defines a token with a denomination and an amount.
+
+          NOTE: The amount field is an Int which implements the custom method
+          signatures required by gogoproto.
+      vetabi_returned:
+        title: vetabi_returned
+        type: object
+        properties:
+          denom:
+            type: string
+          amount:
+            type: string
+        description: |-
+          Coin defines a token with a denomination and an amount.
+
+          NOTE: The amount field is an Int which implements the custom method
+          signatures required by gogoproto.
+    description: MsgWithdrawTabiResponse defines the Msg/WithdrawTabi response type.
   ethermint.evm.v1.ChainConfig:
     type: object
     properties:
