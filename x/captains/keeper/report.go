@@ -203,6 +203,10 @@ func (k Keeper) ValidateReportBatch(ctx sdk.Context, report *types.ReportBatch) 
 		return errorsmod.Wrapf(types.ErrInvalidReport, "node count exceeded")
 	}
 
+	if report.BatchId > digest.TotalBatchCount || report.BatchId < 1 {
+		return errorsmod.Wrapf(types.ErrInvalidReport, "batch id error")
+	}
+
 	if k.HasReportBatch(ctx, report.EpochId, report.BatchId) {
 		return errorsmod.Wrapf(types.ErrInvalidReport, "batch already precessed")
 	}

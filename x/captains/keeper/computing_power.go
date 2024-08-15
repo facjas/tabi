@@ -50,6 +50,9 @@ func (k Keeper) CalcNodeComputingPowerOnEpoch(
 ) sdk.Dec {
 	basePower := sdk.NewDec(int64(k.GetNodeBaseComputingPower(ctx, nodeID)))
 	pledgeRatio := k.CalcNodePledgeRatioOnEpoch(ctx, epochID, nodeID)
+	if pledgeRatio.GT(ownerPledgeRatioUpperBoundWhenCalcPower) {
+		pledgeRatio = ownerPledgeRatioUpperBoundWhenCalcPower
+	}
 	exponentiation := pledgeRatio.Mul(sdk.NewDec(20)).Quo(sdk.NewDec(3)).MustFloat64()
 	exponentiated := sdk.MustNewDecFromStr(fmt.Sprintf("%f", math.Exp(exponentiation)))
 	return basePower.Mul(exponentiated).Mul(powerOnRatio)
