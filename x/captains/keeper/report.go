@@ -17,6 +17,8 @@ func (k Keeper) CommitReport(ctx sdk.Context, report any) error {
 		return k.HandleReportDigest(ctx, report)
 	case *types.ReportBatch:
 		return k.HandleReportBatch(ctx, report)
+	case *types.ReportEmission:
+		return k.HandleReportEmission(ctx, report)
 	case *types.ReportEnd:
 		return k.HandleReportEnd(ctx, report)
 	}
@@ -95,6 +97,39 @@ func (k Keeper) HandleReportBatch(ctx sdk.Context, report *types.ReportBatch) er
 	return nil
 }
 
+func (k Keeper) HandleReportEmission(ctx sdk.Context, report *types.ReportEmission) error {
+	epochId := report.EpochId
+
+	for _, node := range report.Nodes {
+		owner, found := k.GetNodeOwner(ctx, node.NodeId)
+		if !found {
+			return errorsmod.Wrapf(types.ErrNodeNotExists, "node-%s not exists", node.NodeId)
+		}
+		k.SetNodeEmissionByEpoch(ctx, epochId, node.NodeId, node.NodeEmission)
+
+		historyEmission1 := k.GetNodeCumulativeEmissionByEpoch(ctx, epochId-1, node.NodeId)
+		if !historyEmission1.Equal(sdk.ZeroDec()) {
+			historyEmission2 := k.GetNodeCumulativeEmissionByEpoch(ctx, epochId-2, node.NodeId)
+			oldEmission := k.GetNodeEmissionByEpoch(ctx, epochId-1, node.NodeId)
+			k.SetNodeCumulativeEmissionByEpoch(ctx, epochId-1, node.NodeId, historyEmission2.Add(oldEmission))
+		}
+
+		// sample owner pledge once for next epoch
+		if !k.HasOwnerPledge(ctx, owner, epochId+1) {
+			pledge, err := k.SampleOwnerPledge(ctx, owner)
+			if err != nil {
+				return err
+			}
+
+			k.SetOwnerPledge(ctx, owner, epochId+1, pledge)
+		}
+		k.delNodeCumulativeEmissionByEpoch(ctx, epochId-3, node.NodeId)
+		k.delNodeEmissionByEpoch(ctx, epochId-3, node.NodeId)
+
+	}
+	return nil
+}
+
 // HandleReportEnd processes a report end
 func (k Keeper) HandleReportEnd(ctx sdk.Context, report *types.ReportEnd) error {
 	epochId := report.EpochId
@@ -162,6 +197,15 @@ func (k Keeper) ValidateReport(ctx sdk.Context, reportType types.ReportType, rep
 		}
 
 		return batch, nil
+	case types.ReportType_REPORT_TYPE_EMISSION:
+		emission, ok := message.(*types.ReportEmission)
+		if !ok {
+			return nil, errorsmod.Wrapf(types.ErrInvalidReport, "invalid report")
+		}
+		if err := k.ValidateReportEmission(ctx, emission); err != nil {
+			return nil, err
+		}
+		return emission, nil
 	case types.ReportType_REPORT_TYPE_END:
 		end, ok := message.(*types.ReportEnd)
 		if !ok {
@@ -172,6 +216,7 @@ func (k Keeper) ValidateReport(ctx sdk.Context, reportType types.ReportType, rep
 		}
 		return end, nil
 	}
+
 	return nil, errorsmod.Wrapf(types.ErrInvalidReport, "invalid report type")
 }
 
@@ -235,6 +280,11 @@ func (k Keeper) ValidateReportBatch(ctx sdk.Context, report *types.ReportBatch) 
 		}
 	}
 
+	return nil
+}
+
+// ValidateReportEmission checks if the report end is valid
+func (k Keeper) ValidateReportEmission(ctx sdk.Context, report *types.ReportEmission) error {
 	return nil
 }
 

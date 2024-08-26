@@ -16,6 +16,8 @@ enum ReportType {
   REPORT_TYPE_BATCH = 2;
   // REPORT_TYPE_END
   REPORT_TYPE_END = 3;
+  // REPORT_TYPE_EMISSION
+  REPORT_TYPE_EMISSION = 4;
 }
 
 // ReportDigest
@@ -48,6 +50,14 @@ message ReportBatch {
   repeated NodePowerOnRatio nodes = 4 [(gogoproto.nullable) = false];
 }
 
+// ReportEmission marks the a batch of nodes.
+message ReportEmission {
+  // epoch_id is the epoch id of the report
+  uint64 epoch_id = 1;
+  // nodes is the list of node in the batch
+  repeated NodeEpochEmission nodes = 2 [(gogoproto.nullable) = false];
+}
+
 // ReportEnd marks the end of commiting a report.
 message ReportEnd {
   // epoch_id
@@ -60,6 +70,18 @@ message NodePowerOnRatio {
   string node_id = 1;
   // on_operation_ratio is the operation ratio of the node
   string on_operation_ratio = 2 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// NodeEpochEmission is the epoch emission of a node.
+message NodeEpochEmission {
+  // node_id is the id of the node
+  string node_id = 1;
+  // node_emission is the operation ratio of the node
+  string node_emission = 2 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false
