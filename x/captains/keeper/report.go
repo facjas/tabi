@@ -104,7 +104,7 @@ func (k Keeper) HandleReportEmission(ctx sdk.Context, report *types.ReportEmissi
 		if !found {
 			return errorsmod.Wrapf(types.ErrNodeNotExists, "node-%s not exists", node.NodeId)
 		}
-		k.SetNodeEmissionByEpoch(ctx, epochId, node.NodeId, node.NodeEmission)
+		k.SetNodeEmissionByEpoch(ctx, epochId, node.NodeId, node.NodeEmission.Amount.String())
 
 		historyEmission1 := k.GetNodeCumulativeEmissionByEpoch(ctx, epochId-1, node.NodeId)
 		if !historyEmission1.Equal(sdk.ZeroDec()) {
@@ -244,7 +244,7 @@ func (k Keeper) ValidateReportDigest(ctx sdk.Context, report *types.ReportDigest
 
 	// NOTE:  assure all nodes created on chain submitted, otherwise emission calc will be incorrect.
 	if report.TotalNodeCount != k.GetNodesCount(ctx) {
-		return errorsmod.Wrapf(types.ErrInvalidReport, "node count mismatch")
+		return errorsmod.Wrapf(types.ErrInvalidReport, "node count mismatch %d != %d", report.TotalNodeCount, k.GetNodesCount(ctx))
 	}
 
 	return nil

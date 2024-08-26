@@ -212,10 +212,10 @@ func (k Keeper) delNodeCumulativeEmissionByEpoch(ctx sdk.Context, epochID uint64
 }
 
 // SetNodeEmissionByEpoch sets the epoch emission for a node.
-func (k Keeper) SetNodeEmissionByEpoch(ctx sdk.Context, epochID uint64, nodeID string, amount sdk.Dec) {
+func (k Keeper) SetNodeEmissionByEpoch(ctx sdk.Context, epochID uint64, nodeID string, amount string) {
 	store := ctx.KVStore(k.storeKey)
 	key := types.NodeEpochEmissionByEpochStoreKey(epochID, nodeID)
-	store.Set(key, []byte(amount.String()))
+	store.Set(key, []byte(amount))
 }
 
 // GetNodeEmissionByEpoch Gets the epoch emission for a node.
