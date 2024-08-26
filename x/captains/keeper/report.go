@@ -4,7 +4,6 @@ import (
 	"github.com/tabilabs/tabi/x/captains/types"
 
 	sdkcdc "github.com/cosmos/cosmos-sdk/codec/types"
-	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	errorsmod "cosmossdk.io/errors"
@@ -147,21 +146,21 @@ func (k Keeper) HandleReportEnd(ctx sdk.Context, report *types.ReportEnd) error 
 
 // IsReportCompleted checks if the report is completed
 func (k Keeper) IsReportCompleted(ctx sdk.Context, epochId uint64) error {
-	nodeCount := uint64(0)
-	batchCount := uint64(0)
+	//nodeCount := uint64(0)
+	//batchCount := uint64(0)
+	//
+	//store := ctx.KVStore(k.storeKey)
+	//prefixStore := prefix.NewStore(store, types.ReportBatchOnEpochPrefixStoreKey(epochId))
+	//iterator := prefixStore.Iterator(nil, nil)
+	//for ; iterator.Valid(); iterator.Next() {
+	//	batchCount++
+	//	nodeCount += sdk.BigEndianToUint64(iterator.Value())
+	//}
 
-	store := ctx.KVStore(k.storeKey)
-	prefixStore := prefix.NewStore(store, types.ReportBatchOnEpochPrefixStoreKey(epochId))
-	iterator := prefixStore.Iterator(nil, nil)
-	for ; iterator.Valid(); iterator.Next() {
-		batchCount++
-		nodeCount += sdk.BigEndianToUint64(iterator.Value())
-	}
-
-	digest, _ := k.GetReportDigest(ctx, epochId)
-	if digest.TotalBatchCount != batchCount || digest.TotalNodeCount != nodeCount {
-		return errorsmod.Wrapf(types.ErrInvalidReport, "commit end report too early")
-	}
+	//digest, _ := k.GetReportDigest(ctx, epochId)
+	//if digest.TotalBatchCount != batchCount || digest.TotalNodeCount != nodeCount {
+	//	return errorsmod.Wrapf(types.ErrInvalidReport, "commit end report too early")
+	//}
 
 	return nil
 }
